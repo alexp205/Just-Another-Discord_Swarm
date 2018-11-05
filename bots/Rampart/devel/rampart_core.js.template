@@ -1,0 +1,19 @@
+// this is Rampart's bot code but in an unrunnable format
+// to run:
+//    - change extension to just ".js"
+//    - change the <bot key here> placeholder to the actual bot token (found on the app page or by contacting Alex)
+
+const Discord = require("discord.js");
+const client = new Discord.Client();
+
+client.on("ready", () => {
+    console.log("Ready for action!");
+});
+
+client.on("message", (message) => {
+    if (message.content.startsWith("Bot report!")) {
+        message.channel.send("Reporting!");
+    }
+});
+
+client.login("<bot key here>")
