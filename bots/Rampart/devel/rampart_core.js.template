@@ -6,14 +6,49 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 
+  var teamRoster = [client.recipients];
 client.on("ready", () => {
+  for (i = 0; i < teamRoster.length; i++){
+  }
     console.log("Ready for action!");
 });
 
+var botKey = "!";
+
+
 client.on("message", (message) => {
-    if (message.content.startsWith("Bot report!")) {
-        message.channel.send("Reporting!");
+
+    if (!message.content.startsWith(botKey)) return;
+
+    const args = message.content.slice(botKey.length).trim().split(/ +/g);
+    const command = args.shift.toLowerCase;
+
+    switch (command) {
+      case "reset_mains" :
+      reset_Mains(args);
+      break;
+
+      case "report" :
+      message.channel.send("Reporting, bitches!");
+      break;
     }
 });
 
-client.login("<bot key here>")
+/* Adds and prints out Hero Roster */
+function reset_Mains(heroRoster) {
+
+  for(i = 0; i < teamRoster.length; i++) {
+    if (message.author.username == teamRoster[i].username){
+      var userKey = i;
+      teamRoster[userKey][1].push(heroRoster);
+    }
+  }
+
+  var updatedRoster = message.author.username +"'s Hero Roster is now: \n";
+      for(j = 0; j < teamRoster[userKey][1].length; j++){
+        updatedRoster = updatedRoster + j + ") " + teamRoster[userKey][j] + "\n";
+      }
+  message.channel.send(updatedRoster);
+}
+
+client.login("")
