@@ -10,6 +10,7 @@ const client = new Discord.Client();
   const heroPool = {"D.Va", "Orisa", "Reinhardt", "Roadhog","Winston", "Wrecking Ball", "Zarya", "Ashe", "Bastion",
                     "Doomfist", "Genji", "Hanzo", "Junkrat", "McCree", "Mei", "Pharah", "Reaper", "Soldier 76", "Sombra",
                      "Symmetra", "Torbjorn", "Tracer", "Widowmaker", "Ana", "Brigette", "Lucio", "Mercy", "Moira", "Zen"}
+
 client.on("ready", () => {
   for (i = 0; i < teamRoster.length; i++){
   }
@@ -51,12 +52,16 @@ client.on("message", (message) => {
     }
       break;
 
+      case "swap" :
+      swap_mains(args);
+      break;
+
       case "report" :
       message.channel.send("Reporting, bitches!");
       break;
 
-      case "swap" :
-      swap_mains(args);
+      // case "update" :
+      // OWCrawler.update();
     }
 });
 
@@ -66,7 +71,7 @@ function reset_Mains(heroRoster) {
   //Checks for non-strings and duplicate names
   for (var l = 0; l < heroRoster.length; l++){
     //If the string is included in the heroRoster
-  if (heroPool.includes(parseInt(heroRoster[l])){
+  if (heroPool.heroName.includes(parseInt(heroRoster[l])){
     //Sets the heroName to be checked
      var duplicateCheck = heroRoster[l].toLowerCase;
      //Searches the user's heroRoster
