@@ -1,46 +1,46 @@
-class HeroRoster{
-heroList = ["D.Va", "Orisa", "Reinhardt", "Roadhog","Winston", "Wrecking Ball", "Zarya", "Ashe", "Bastion",
-                    "Doomfist", "Genji", "Hanzo", "Junkrat", "McCree", "Mei", "Pharah", "Reaper", "Soldier 76", "Sombra",
-                     "Symmetra", "Torbjorn", "Tracer", "Widowmaker", "Ana", "Brigette", "Lucio", "Mercy", "Moira", "Zen"]
+class HeroRoster {
+    heroList = {"D.Va","Orisa","Reinhardt","Roadhog","Winston","Wrecking Ball","Zarya","Ashe","Bastion",
+                  "Doomfist","Genji","Hanzo","Junkrat","McCree","Mei","Pharah","Reaper","Soldier 76","Sombra",
+                  "Symmetra","Torbjorn","Tracer","Widowmaker","Ana","Brigette","Lucio","Mercy","Moira","Zen"}
 
-constructor(){
-  for (i = 0; i < heroList.length; i++){
-  hero
-  heroRoster = heroRoster.push(heroObject(heroList[i], new));
-}
-}
+    constructor() {
+        for (i = 0; i < heroList.length; i++) {
+            hero
+            heroRoster = heroRoster.push(heroObject(heroList[i], new));
+        }
+    }
 }
 
-// update(){ //Entire class needs to be implemented
+// update() { // Entire class needs to be implemented
 // OWCrawler.update(heroList)
-// //save
+// // save
 // }
 //
-// getHealers(){
+// getHealers() {
 //
 // }
-// getDPS(){
+// getDPS() {
 //
 // }
-// getTanks(){
+// getTanks() {
 //
 // }
-// getMainHealers(){
+// getMainHealers() {
 //
 // }
-// getSecondaryHealers(){
+// getSecondaryHealers() {
 //
 // }
-// getMainTanks(){
+// getMainTanks() {
 //
 // }
-// getOffTanks(){
+// getOffTanks() {
 //
 // }
-// getZoners(){
+// getZoners() {
 //
 // }
-// getFlankers(){
+// getFlankers() {
 //
 // }
 // }
