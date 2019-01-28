@@ -1,7 +1,3 @@
-// this is Rampart's bot code but in an unrunnable format
-// to run:
-//    - change the <bot key here> placeholder to the actual bot token (found on the app page or by contacting Alex)
-
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const config = require("./config.json");
