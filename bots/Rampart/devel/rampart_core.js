@@ -1,5 +1,7 @@
 const Discord = require("discord.js");
+const SQLite = require("better-sqlite3");
 const client = new Discord.Client();
+const sql = new SQLite('./member_info.sqlite');
 const config = require("./config.json");
 
 // Alex: Jake, "roster" here is used to denote humans in the server but also each person's hero pool later, which is it?
@@ -150,6 +152,17 @@ function debug_features() {
 
     client.channels.get(config.test_channelID).send("bot_key: " + config.bot_key);
     client.channels.get(config.test_channelID).send("bot_key length: " + config.bot_key.length);
+
+    const table = sql.prepare("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='scores';").get();
+    if (!table['COUNT(*)']) {
+        // create table
+	sql.prepare("CREATE TABLE ...;").run();
+	sql.pragma("synchronous = 1");
+	sql.pragma("journal_mode = wal");
+    }
+    // set up table queries as commands/fxns
+    client.<fxn name here> = sql.prepare("...;");
+    client.<fxn name here> = sql.prepare("...;");
 
     // Alex: Jake, not sure what you were trying to test but this was in the startup handler, go ahead and uncomment/add anything you wanted to test here
 //    for (i = 0; i < teamRoster.length; i++){
