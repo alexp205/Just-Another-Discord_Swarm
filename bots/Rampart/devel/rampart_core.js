@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const SQLite = require("better-sqlite3");
 const client = new Discord.Client();
-const sql = new SQLite('./member_info.sqlite');
+const sql = new SQLite('./rampart.db');
 const config = require("./config.json");
 
 // Alex: Jake, "roster" here is used to denote humans in the server but also each person's hero pool later, which is it?
@@ -9,71 +9,6 @@ var teamRoster = [client.recipients];
 const heroPool = ["D.Va","Orisa","Reinhardt","Roadhog","Winston","Wrecking Ball","Zarya","Ashe","Bastion",
                   "Doomfist","Genji","Hanzo","Junkrat","McCree","Mei","Pharah","Reaper","Soldier 76","Sombra",
                   "Symmetra","Torbjorn","Tracer","Widowmaker","Ana","Brigette","Lucio","Mercy","Moira","Zen"]
-
-client.on("ready", () => {
-    // run debug tests first
-    debug_features();
-
-    // TODO: we should probably have a startup checker here at some point
-
-    // debugging done, operations should be ready
-    console.log("Ready for action!");
-});
-
-// We should implement this eventually: https://anidiots.guide/first-bot/a-basic-command-handler
-client.on("message", (message) => {
-
-    if (!message.content.startsWith(config.bot_key) || message.author.bot) return;
-
-    const args = message.content.slice(config.bot_key.length).trim().split(/ +/g);
-    // DEBUG
-    message.channel.send("[DEBUG] " + args)
-    const command = args.shift().toLowerCase();
-    // DEBUG
-    message.channel.send("[DEBUG] " + command)
-
-    // --------------------------------------------------------------
-    // The commands implemented so far are
-    // --------------------------------------------------------------
-    //
-    // reset_mains -    Allows a user to declare a hero roster
-    // TODO: Implement a database
-    //
-    // swap -           Allows a user to swap the rank of two heros
-    //
-    // report -         Reports a generic message
-    //
-    // --------------------------------------------------------------
-    // The planned commands are
-    // --------------------------------------------------------------
-    //
-    // make_comp -      Makes a comp based on the team's hero rosters
-    //
-    // display_roster - Displays the user's heroRoster
-
-    switch (command) {
-      case "reset_mains" :
-          if (args.length > 0) {
-              reset_mains(args);
-          }
-          else {
-              message.channel.send("This command needs an argument!")
-          }
-          break;
-
-      case "swap" :
-          swap_mains(args);
-          break;
-
-      case "report" :
-          message.channel.send("Reporting, bitches!");
-          break;
-
-      // case "update" :
-          // OWCrawler.update();
-          // break;
-    }
-});
 
 /* Adds and prints out Hero Roster */
 function reset_mains(heroRoster) {
@@ -153,16 +88,27 @@ function debug_features() {
     client.channels.get(config.test_channelID).send("bot_key: " + config.bot_key);
     client.channels.get(config.test_channelID).send("bot_key length: " + config.bot_key.length);
 
-    const table = sql.prepare("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='scores';").get();
+    const table = sql.prepare("SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='player_info';").get();
     if (!table['COUNT(*)']) {
         // create table
-	sql.prepare("CREATE TABLE ...;").run();
+	sql.prepare("CREATE TABLE player_info(id INT PRIMARY KEY NOT NULL, name TEXT NOT NULL, bnet_tag TEXT NOT NULL, hero1 TEXT NOT NULL, hero2 TEXT, hero3 TEXT, points INT NOT NULL);").run();
 	sql.pragma("synchronous = 1");
 	sql.pragma("journal_mode = wal");
     }
+    client.channels.get(config.test_channelID).send("[DEBUG] contents of test table:");
+    const test_info = sql.prepare("SELECT * FROM test;").get();
+    console.log(test_info)
+    for (const [key, value] of Object.entries(test_info)) {
+        client.channels.get(config.test_channelID).send(key + ": " + value);
+    }
+    client.channels.get(config.test_channelID).send("[DEBUG] contents of player_info table:");
+    const playerinfo_info = sql.prepare("SELECT * FROM player_info;").get();
+    console.log(playerinfo_info)
+    for (const [key, value] of Object.entries(playerinfo_info)) {
+        client.channels.get(config.test_channelID).send(key + ": " + value);
+    }
     // set up table queries as commands/fxns
-    client.<fxn name here> = sql.prepare("...;");
-    client.<fxn name here> = sql.prepare("...;");
+    //client.<fxn name here> = sql.prepare("...;");
 
     // Alex: Jake, not sure what you were trying to test but this was in the startup handler, go ahead and uncomment/add anything you wanted to test here
 //    for (i = 0; i < teamRoster.length; i++){
@@ -171,5 +117,85 @@ function debug_features() {
     client.channels.get(config.test_channelID).send("--------------------------------------------------");
     client.channels.get(config.test_channelID).send("[DEBUG] Exiting debug mode, functionality resuming");
 }
+
+/* startup check, makes sure essential functions are in functional and resources are in place */
+function startup_check() {
+
+}
+
+client.on("ready", () => {
+    // run debug tests first
+    debug_features();
+
+    // TODO: we should probably have a startup checker here at some point
+    startup_check();
+
+    // debugging done, operations should be ready
+    console.log("Ready for action!");
+});
+
+// We should implement this eventually: https://anidiots.guide/first-bot/a-basic-command-handler
+client.on("message", (message) => {
+
+    if (!message.content.startsWith(config.bot_key) || message.author.bot) return;
+
+    const args = message.content.slice(config.bot_key.length).trim().split(/ +/g);
+    // DEBUG
+    message.channel.send("[DEBUG] " + args)
+    const command = args.shift().toLowerCase();
+    // DEBUG
+    message.channel.send("[DEBUG] " + command)
+
+    // ----------------------------------------------------------------------
+    // The commands implemented so far are
+    // ----------------------------------------------------------------------
+    //
+    // reset_mains -    Allows a user to declare a hero roster
+    //
+    // swap -           Allows a user to swap the rank of two heros
+    //
+    // report -         Reports a generic message
+    //
+    // help -           Shows all available commands and a short description
+    //
+    // ----------------------------------------------------------------------
+    // The planned commands are
+    // ----------------------------------------------------------------------
+    //
+    // make_comp -      Makes a comp based on the team's hero rosters
+    //
+    // display_roster - Displays the user's heroRoster
+
+    switch (command) {
+      case "reset_mains" :
+          if (args.length > 0) {
+              reset_mains(args);
+          }
+          else {
+              message.channel.send("This command needs an argument!")
+          }
+          break;
+
+      case "swap" :
+          swap_mains(args);
+          break;
+
+      case "report" :
+          message.channel.send("Reporting, bitches!");
+          break;
+
+      case "help":
+          message.channel.send("List of commands:");
+          message.channel.send("reset_mains --- allows a user to declare a hero roster (CURRENTLY UNIMPLEMENTED)");
+          message.channel.send("swap        --- allows a user to swap the rank of two heros (CURRENTLY UNIMPLEMENTED)");
+          message.channel.send("report      --- reports a generic message");
+          message.channel.send("help        --- displays this message");
+          break;
+
+      // case "update" :
+          // OWCrawler.update();
+          // break;
+    }
+});
 
 client.login(config.token);
